@@ -1,0 +1,38 @@
+version: '3'
+
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./password_file:/etc/mosquitto/password_file
+    networks:
+      - mqtt-network
+
+  mqtt-broker-tls-generic:
+    image: eclipse-mosquitto
+    ports:
+      - "8883:8883"
+    volumes:
+      - ./mosquitto-tls.conf:/mosquitto/config/mosquitto.conf
+      - ./password_file:/etc/mosquitto/password_file
+      - ./certs/generic:/mosquitto/certs
+    networks:
+      - mqtt-network
+
+  mqtt-broker-tls-a1mini:
+    image: eclipse-mosquitto
+    ports:
+      - "9993:8883"
+    volumes:
+      - ./mosquitto-a1mini.conf:/mosquitto/config/mosquitto.conf
+      - ./password_file:/etc/mosquitto/password_file
+      - ./certs/a1mini:/mosquitto/certs
+    networks:
+      - mqtt-network
+
+networks:
+  mqtt-network:
+    driver: bridge
